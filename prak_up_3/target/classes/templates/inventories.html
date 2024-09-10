@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+  <form action="/toys" method="get">
+    <input type="submit" value="Страница с игрушками">
+  </form>
+  <h1>Список инвентаря</h1>
+
+  <form action="#" th:action="@{/inventories}" method="post" th:object="${inventory}">
+    <label for="toy">Игрушка:</label>
+    <select th:field="*{toy.id}" id="toy">
+      <option value="" disabled selected>Выберите игрушку</option>
+      <option th:each="toy : ${toys}" th:value="${toy.id}" th:text="${toy.name}"></option>
+    </select>
+    <div th:if="${#fields.hasErrors('toy')}" style="color:red;">
+      <span th:errors="*{toy}"></span>
+    </div>
+
+    <input type="number" th:field="*{quantity}" placeholder="Количество" required />
+    <div th:if="${#fields.hasErrors('quantity')}" style="color:red;">
+      <span th:errors="*{quantity}"></span>
+    </div>
+
+    <button type="submit">Добавить инвентарь</button>
+  </form>
+
+  <h2>Существующий инвентарь:</h2>
+  <ul>
+    <li th:each="inventory : ${inventories}">
+      <span th:text="${inventory.toy.name}">Игрушка</span> -
+      <span th:text="${inventory.quantity}">Количество</span>
+      <a th:href="@{/inventories/edit/{id}(id=${inventory.id})}">Редактировать</a>
+      <a th:href="@{/inventories/delete/{id}(id=${inventory.id})}" onclick="return confirm('Вы уверены, что хотите удалить?');">Удалить</a>
+    </li>
+  </ul>
+</body>
+</html>

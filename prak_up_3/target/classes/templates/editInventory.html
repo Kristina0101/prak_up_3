@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <h1>Редактирование инвентаря</h1>
+
+  <form action="#" th:action="@{/inventories/update}" method="post" th:object="${inventory}">
+    <input type="hidden" th:field="*{id}" />
+
+    <label for="toy">Игрушка:</label>
+    <select th:field="*{toy.id}" id="toy">
+      <option value="" disabled>Выберите игрушку</option>
+      <option th:each="toy : ${toys}" th:value="${toy.id}" th:text="${toy.name}" th:selected="${toy.id == inventory.toy.id}"></option>
+    </select>
+    <div th:if="${#fields.hasErrors('toy')}" style="color:red;">
+      <span th:errors="*{toy}"></span>
+    </div>
+
+    <input type="number" th:field="*{quantity}" placeholder="Количество" required />
+    <div th:if="${#fields.hasErrors('quantity')}" style="color:red;">
+      <span th:errors="*{quantity}"></span>
+    </div>
+
+    <button type="submit">Обновить инвентарь</button>
+  </form>
+
+  <a href="/inventories">Назад к списку инвентаря</a>
+</body>
+</html>
